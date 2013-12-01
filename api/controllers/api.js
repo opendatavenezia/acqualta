@@ -41,8 +41,7 @@ module.exports = function() {
         // build query
         q = "SELECT dl.*, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias \
              FROM device_log AS dl \
-             JOIN device AS d ON dl.id_device = d.id \
-             ORDER BY dl.date_sent DESC";
+             JOIN device AS d ON dl.id_device = d.id";
 
              // joining this table makes the query very slow, as we have more billions of record in this table
              //        q = "SELECT dl.*, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias, dld.id_log, dld.id_row \
@@ -52,7 +51,11 @@ module.exports = function() {
           q += " WHERE dl.id_device = ?";
           params.push(device_id);
         }
+
+        // last parts
+        q += " ORDER BY dl.date_sent DESC";
         q += " LIMIT ?, ?";
+
 
         // query params
         params.push(offset);
