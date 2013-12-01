@@ -1,1 +1,1 @@
-exports.mainController = require("./apiController");
+exports.mainController = require("./apiController")(req, res);

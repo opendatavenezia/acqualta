@@ -1,32 +1,28 @@
-var dataModel = function() {
+module.exports = function() {
 	var mysql = require('mysql');
 	var config = require('../config.js');
-	var dbc = false;
 
-	// connect
-	this.connect = function() {
-		connection = mysql.createConnection({
-		  host     : config.db_host,
-		  user     : config.db_user,
-		  password : config.db_pass,
-		  database : config.db_name
-		});
+	var db = {
+		dbc: false,
+		connect: function() {
+			connection = mysql.createConnection({
+			  host     : config.db_host,
+			  user     : config.db_user,
+			  password : config.db_pass,
+			  database : config.db_name
+			});
 
-		// handle errors
-		connection.on('error', function(err) {
-  		console.log(err.code); // 'ER_BAD_DB_ERROR'
-  		exit(0);
-		});
-
-		// keep connection
-		this.dbc = connection;
-		return this.dbc;
+			// keep connection
+			dbc = connection;
+		},
+		query: function(sql, limit, offset, res_callback, err_callback) {
+		  dbc.query(sql, [limit, offset], function(err, rows) {
+		  	if (err) {
+		  		return err_callback('Mysql error code: ' + err.code);
+		  	}
+	  		res_callback(rows);
+			});
+		}
 	}
-
-	this.query = function(sql, limit, offset, callback) {
-		this.dbc.query(sql, [limit, offset], function(err, results) {
-  		callback(results);
-		});
-	}
+	return db;
 }
-module.exports = new dataModel();

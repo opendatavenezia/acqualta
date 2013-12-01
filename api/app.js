@@ -5,7 +5,7 @@
 
 var _ = require('underscore');
 var express = require('express');
-var controllers = require('./controllers');
+var api = require('./controllers/api')();
 var http = require('http');
 var path = require('path');
 var app = express();
@@ -31,8 +31,8 @@ if ('development' == app.get('env')) {
 }
 
 // routes
-app.get('/api/data', controllers.mainController().apiAction.data);
-app.get('/api/geo', controllers.mainController().apiAction.geo);
+app.get('/api/data', api.apiAction.init, api.apiAction.data);
+app.get('/api/geo', api.apiAction.geo);
 
 
 http.createServer(app).listen(app.get('port'), function(){
