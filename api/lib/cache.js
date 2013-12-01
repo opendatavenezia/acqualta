@@ -1,30 +1,24 @@
 module.exports = function() {
-	var mysql = require('mysql');
+	var memcache = require('mc');
 	var config = require('../config.js');
-	var md5 = require('MD5');
-	var cache = require("ncache");
 
-	var db = {
-		dbc: false,
-		connect: function() {
-			connection = mysql.createConnection({
-			  host     : config.db_host,
-			  user     : config.db_user,
-			  password : config.db_pass,
-			  database : config.db_name
+	var cache = {
+		connect: function(callback, err_callback) {
+			client = new memcache.Client();
+			client.connect(function() {
+				callback(client);
 			});
 
-			// keep connection
-			dbc = connection;
 		},
-		// very basic memory cache implemented
 		query: function(sql, params, res_callback, err_callback) {
 			var md5_query = md5(sql + params.join('-'));
 			if (cache.get(md5_query)) {
+				console.log('cache hit');
 				data = cache.get(md5_query);
 				res_callback(data);
 			}
 			else {
+				console.log('cache miss');
 			  dbc.query(sql, params, function(err, rows) {
 			  	if (err) {
 			  		return err_callback('Mysql error code: ' + err.code);
@@ -35,5 +29,5 @@ module.exports = function() {
 			}
 		}
 	}
-	return db;
+	return cache;
 }

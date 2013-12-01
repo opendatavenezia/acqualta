@@ -5,39 +5,82 @@ module.exports = function() {
   var mysql = require('mysql');
 	var model = require('../model/data.js')();
   var dbc = model.connect();
+  var squel = require("squel");
 
   // controller
   var self = {
     // api object
     apiAction: {
-      init: function(req, res, next) {
+      init: function(request, response, next) {
         // init data renderers
-        render = require('../views/render')(req, res);
+        render = require('../views/render')(request, response);
 
         // options
-        limit = (req.query.limit ? parseInt(req.query.limit) : 30);
-        offset = (req.query.offset ? parseInt(req.query.offset) : 0);
+        limit = (request.query.limit ? parseInt(request.query.limit) : 30);
+        offset = (request.query.offset ? parseInt(request.query.offset) : 0);
 
         // define error callback
         err_callback = function(err) {
           render.json(err, 'error')
         }
 
+        // proxy
+        req = request;
+        res = response;
+
         // follow next call
         next();
       },
-      data: function(req, res) {
+
+      // get data from devices
+      data: function() {
+        var device_id = req.params.device_id;
+        var params = [];
+
         // build query
-        q = "SELECT dl.*, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias FROM device_log AS dl JOIN device AS d ON dl.id_device = d.id";
+        q = "SELECT dl.*, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias, dld.id_log, dld.id_row \
+             FROM device_log AS dl \
+             JOIN device AS d ON dl.id_device = d.id \
+             JOIN device_log_details AS dld ON dl.id = dld.id_log";
+        if (device_id) {
+          q += " WHERE dl.id_device = ?";
+          params.push(device_id);
+        }
         q += " LIMIT ?, ?";
 
-        model.query(q, offset, limit, function(results) {
+        // query params
+        params.push(offset);
+        params.push(limit);
+
+        model.query(q, params, function(results) {
           // flatten json
           flattened_results = _.flatten(_.compact(results));
           render.json(flattened_results, 'success');
         }, err_callback)
       },
-      geo: function(req, res) {
+
+      // get device details
+      devices: function() {
+        var device_id = req.params.device_id;
+        var params = [];
+
+        // build query
+        q = "SELECT d.id, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias \
+             FROM device AS d";
+        if (device_id) {
+          q += " WHERE id = ?";
+          params = [device_id];
+        }
+
+        // query
+        model.query(q, params, function(results) {
+          // flatten json
+          flattened_results = _.flatten(_.compact(results));
+          render.json(flattened_results, 'success');
+        }, err_callback)
+
+      },
+      geo: function() {
         res.end('geo');
       }
     },

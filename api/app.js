@@ -30,9 +30,32 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+if ('production' == app.get('env')) {
+	// throttle requests TBD
+	/*
+	var extras = require('express-extras');
+	app.configure(function() {
+    app.use(extras.throttle());
+
+    //Or supply a config object
+    //The default config shown..
+    app.use(extras.throttle({
+      urlCount: 5,
+      urlSec: 1,
+      holdTime: 30,
+      whitelist: {
+          '127.0.0.1': true
+      }
+    }));
+	});
+	*/
+}
+
 // routes
-app.get('/api/data', api.apiAction.init, api.apiAction.data);
-app.get('/api/geo', api.apiAction.geo);
+app.get('/api/devices/:device_id?', api.apiAction.init, api.apiAction.devices);
+app.get('/api/data/:device_id?', api.apiAction.init, api.apiAction.data);
+//app.get('/api/device/:id', api.apiAction.init, api.apiAction.devices);
+app.get('/api/data/:id/geo', api.apiAction.geo);
 
 
 http.createServer(app).listen(app.get('port'), function(){
