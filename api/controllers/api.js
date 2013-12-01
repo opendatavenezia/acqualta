@@ -5,7 +5,6 @@ module.exports = function() {
   var mysql = require('mysql');
   var model = require('../model/data.js')();
   var dbc = model.connect();
-  var squel = require("squel");
 
   // controller
   var self = {
