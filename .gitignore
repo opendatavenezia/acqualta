@@ -6,8 +6,10 @@ lib-cov
 *.out
 *.pid
 *.gz
+*.bz2
 
 data.json
+config.json
 pids
 logs
 results
