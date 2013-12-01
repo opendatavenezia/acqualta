@@ -55,7 +55,6 @@ if ('production' == app.get('env')) {
 app.get('/api/devices/:device_id?', api.apiAction.init, api.apiAction.devices);
 app.get('/api/data/:device_id?', api.apiAction.init, api.apiAction.data);
 //app.get('/api/device/:id', api.apiAction.init, api.apiAction.devices);
-app.get('/api/data/:id/geo', api.apiAction.geo);
 
 
 http.createServer(app).listen(app.get('port'), function(){

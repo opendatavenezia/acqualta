@@ -40,10 +40,15 @@ module.exports = function() {
         var params = [];
 
         // build query
-        q = "SELECT dl.*, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias, dld.id_log, dld.id_row \
+        q = "SELECT dl.*, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias \
              FROM device_log AS dl \
              JOIN device AS d ON dl.id_device = d.id \
-             JOIN device_log_details AS dld ON dl.id = dld.id_log";
+             ORDER BY dl.date_sent DESC";
+
+             // joining this table makes the query very slow, as we have more billions of record in this table
+             //        q = "SELECT dl.*, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias, dld.id_log, dld.id_row \
+             //              JOIN device_log_details AS dld ON dl.id = dld.id_log \
+
         if (device_id) {
           q += " WHERE dl.id_device = ?";
           params.push(device_id);
@@ -53,7 +58,6 @@ module.exports = function() {
         // query params
         params.push(offset);
         params.push(limit);
-
         model.query(q, params, function(results) {
           // flatten json
           flattened_results = _.flatten(_.compact(results));
