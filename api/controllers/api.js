@@ -13,7 +13,7 @@ module.exports = function() {
     apiAction: {
       init: function(request, response, next) {
         // init data renderers
-        render = require('../views/render')(request, response);
+        render = require('../lib/render')(request, response);
 
         // options
         limit = (request.query.limit ? parseInt(request.query.limit) : 30);
@@ -90,9 +90,6 @@ module.exports = function() {
           }
         }, err_callback)
 
-      },
-      geo: function() {
-        res.end('geo');
       }
     },
   };
