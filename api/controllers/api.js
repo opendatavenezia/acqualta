@@ -1,9 +1,9 @@
 //apiController.js
 module.exports = function() {
-	// instance model
+  // instance model
   var _ = require('underscore');
   var mysql = require('mysql');
-	var model = require('../model/data.js')();
+  var model = require('../model/data.js')();
   var dbc = model.connect();
   var squel = require("squel");
 
