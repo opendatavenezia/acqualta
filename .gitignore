@@ -9,7 +9,7 @@ lib-cov
 *.bz2
 
 data.json
-config.json
+config.js
 pids
 logs
 results
