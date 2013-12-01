@@ -11,6 +11,7 @@
     "underscore": "*",
     "express-extras": "*",
     "ncache": "*",
-    "MD5": "*"
+    "MD5": "*",
+    "geojson": "*"
   }
 }

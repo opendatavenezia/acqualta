@@ -18,6 +18,8 @@ module.exports = function() {
         // options
         limit = (request.query.limit ? parseInt(request.query.limit) : 30);
         offset = (request.query.offset ? parseInt(request.query.offset) : 0);
+        type = (request.query.type ? request.query.type  : 'raw'); // render type
+
 
         // define error callback
         err_callback = function(err) {
@@ -76,7 +78,12 @@ module.exports = function() {
         model.query(q, params, function(results) {
           // flatten json
           flattened_results = _.flatten(_.compact(results));
-          render.json(flattened_results, 'success');
+          if (type == 'geo') {
+            render.geoJson(flattened_results);
+          }
+          else {
+            render.json(flattened_results, 'success');
+          }
         }, err_callback)
 
       },
