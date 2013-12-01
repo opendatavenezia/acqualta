@@ -31,10 +31,10 @@ if ('development' == app.get('env')) {
 }
 
 if ('production' == app.get('env')) {
-	// throttle requests TBD
-	/*
-	var extras = require('express-extras');
-	app.configure(function() {
+  // throttle requests TBD
+  /*
+  var extras = require('express-extras');
+  app.configure(function() {
     app.use(extras.throttle());
 
     //Or supply a config object
@@ -47,8 +47,8 @@ if ('production' == app.get('env')) {
           '127.0.0.1': true
       }
     }));
-	});
-	*/
+  });
+  */
 }
 
 // routes
