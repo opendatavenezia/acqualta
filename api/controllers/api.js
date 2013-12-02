@@ -39,10 +39,10 @@ module.exports = function() {
         var params = [];
 
         // build query
-        q = "SELECT dl.*, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias \
+        q = "SELECT dl.id, dl.id_device, dl.date_sent, dl.tweet, dl.level, dl.battery_voltage, dl.panel_voltage, dl.temperature, dl.csq, dl.ber \
+             d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias \
              FROM device_log AS dl \
              JOIN device AS d ON dl.id_device = d.id";
-
              // joining this table makes the query very slow, as we have more billions of record in this table
              //        q = "SELECT dl.*, d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias, dld.id_log, dld.id_row \
              //              JOIN device_log_details AS dld ON dl.id = dld.id_log \
