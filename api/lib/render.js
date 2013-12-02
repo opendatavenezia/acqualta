@@ -31,10 +31,13 @@ module.exports = function(req, res) {
 				}
 				data.push(device);
 			});
+
+      // create geojson object
 			GeoJSON.parse(data, {Point: ['lat', 'lng']}, function(geojson) {
 			  res.type('application/json');
 	      res.jsonp(geojson);
 			});
+
 		}
 	}
 	return renderers;
