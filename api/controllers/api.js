@@ -39,7 +39,7 @@ module.exports = function() {
         var params = [];
 
         // build query
-        q = "SELECT dl.id, dl.id_device, dl.date_sent, dl.tweet, dl.level, dl.battery_voltage, dl.panel_voltage, dl.temperature, dl.csq, dl.ber \
+        q = "SELECT dl.id, dl.id_device, dl.date_sent, dl.tweet, dl.level, dl.battery_voltage, dl.panel_voltage, dl.temperature, dl.csq, dl.ber, \
              d.latitude, d.longitude, d.description, d.twitter_enabled, d.location, d.district, d.alias \
              FROM device_log AS dl \
              JOIN device AS d ON dl.id_device = d.id";
@@ -55,7 +55,6 @@ module.exports = function() {
         // last parts
         q += " ORDER BY dl.date_sent DESC";
         q += " LIMIT ?, ?";
-
 
         // query params
         params.push(offset);
