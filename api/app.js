@@ -54,6 +54,9 @@ if ('production' == app.get('env')) {
 // routes
 app.get('/api/devices/:device_id?', api.apiAction.init, api.apiAction.devices);
 app.get('/api/data/:device_id?', api.apiAction.init, api.apiAction.data);
+app.get('/', function(req, res) {
+  res.send('Acqualta API: http://acqualta.org - Documentation: http://www.acqualta.org/opendata');
+});
 //app.get('/api/device/:id', api.apiAction.init, api.apiAction.devices);
 
 
